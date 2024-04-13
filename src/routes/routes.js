@@ -76,7 +76,12 @@ routes.post('/cursos', async (req, res) => {
 })
 
 routes.get('/cursos', async (req, res) => {
-    const cursos = await Curso.findAll()
+    const nome = req.query.nome || ''
+    const cursos = await Curso.findAll({
+        where:{
+            nome:nome
+        }
+    })
     res.json(cursos)
 })
 
