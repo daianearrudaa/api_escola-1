@@ -4,6 +4,9 @@ const { connection } = require('./database/connection') // Configuração de ace
 const routes = require('./routes/routes')
 
 const PORT_API = process.env.PORT_API 
+const app = express();
+
+app.use(express.json());
 
 class Server {
   constructor (server = express())// Argumento do constructor auto iniciado da aplicação para usarmos as devidas funções do express

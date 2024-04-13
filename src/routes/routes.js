@@ -21,17 +21,29 @@ routes.get('/bem_vindo', (req, res) => {
 
 
 routes.post('/alunos', async (req, res) => {
+try{
     const nome = req.body.nome
     const data_nascimento = req.body.data_nascimento
     const celular = req.body.celular
+
+    if(!nome) {
+        return res.status(400).json({messagem: 'O nome é obrigatório'})
+    }
+
+    if(!data_nascimento) {
+        return res.status(400).json({messagem: 'A data de nascimento é obrigatória'})
+    }
 
     const aluno = await Aluno.create({
         nome: nome,
         data_nascimento: data_nascimento,
         celular: celular
     })
-
-    res.json(aluno)
+    res.status(201).json(aluno)
+    }catch(error){
+        console.log(error)
+        res.status(500).json({error: 'Não foi possível cadastrar o aluno'})
+    }
 })
 
 routes.get('/alunos', async (req, res) => {
@@ -40,8 +52,17 @@ routes.get('/alunos', async (req, res) => {
 })
 
 routes.post('/cursos', async (req, res) => {
+    try{
     const nome = req.body.nome
     const duracao_horas = req.body.duracao_horas
+
+    if(!nome) {
+        return res.status(400).json({messagem: 'O nome do curso é obrigatório'})
+    }
+
+    if(!duracao_horas) {
+        return res.status(400).json({messagem: 'A duração/horas do curso é obrigatória'})
+    }
 
     const curso = await Curso.create({
         nome: nome,
@@ -49,6 +70,9 @@ routes.post('/cursos', async (req, res) => {
     })
 
     res.json(curso)
+    } catch(error){
+        res.status(500).json({error: 'Não foi possível cadastrar o curso'})
+    }
 })
 
 routes.get('/cursos', async (req, res) => {
@@ -56,5 +80,15 @@ routes.get('/cursos', async (req, res) => {
     res.json(cursos)
 })
 
-module.exports = routes
+routes.delete('/cursos/:id', (req, res) => {
+    const id =  req.params.id
 
+    Curso.destroy({
+        where: {
+            id: id
+        }
+    })
+    res.json({messagem:'entrei aqui'})
+})
+
+module.exports = routes
