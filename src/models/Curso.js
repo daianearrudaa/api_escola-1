@@ -11,5 +11,3 @@ const Curso = connection.define('cursos', {
 })
 
 module.exports = Curso
-
-
